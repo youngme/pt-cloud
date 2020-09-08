@@ -1,0 +1,56 @@
+server:
+  port: 9000 #网关服务监听 9000 端口
+
+#eureka:
+#  instance:
+#    hostname: 127.0.0.1
+#  client:
+#    register-with-eureka: true
+#    service-url:
+#      default-zone: http://${eureka.instance.hostname}:8761/eureka/
+spring:
+  application:
+    name: gateway-web
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6301}
+    #password: ${REDIS_PASSWORD:}
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #与服务发现组件进行组合，通过serviceId转发到具体的服务实例上去
+          lower-case-service-id: true #当注册中心为eureka时，设置为true表示开启小写的serviceId进行路由转发
+#nacos 服务发现
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  #jwt密码
+  security:
+    oauth2:
+      jwt:
+        signingKey: 123456
+  autoconfigure:
+    exclude: org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration
+oauth:
+  token:
+    oauthorizationKey: 'Basic YWRtaW5fY2xpZW50OmFkbWluX3NlY3JldA=='
+#网关白名单，无需要签权url
+gate:
+  ignore:
+    authentication:
+       startWith: /oauth,/open,/registry,/sms,/actuator,/server/img,/jcc/building/free,/jcc/material/free,/jcc/reading,/jcc/information
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+    com.jalja.org.spring: debug
+  path: logs/
+  file:
+    max-size: 1GB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

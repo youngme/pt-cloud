@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bin.cloud.business.material.base.dao.JccMaterialInfoMapper">
+    <resultMap id="BaseResultMap" type="jccMaterialInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="business_name" jdbcType="VARCHAR" property="businessName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="county" jdbcType="VARCHAR" property="county"/>
+        <result column="town" jdbcType="VARCHAR" property="town"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="img_id" jdbcType="BIGINT" property="imgId"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+    </resultMap>
+    <resultMap id="pageMap" type="jccMaterialInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="business_name" jdbcType="VARCHAR" property="businessName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="county" jdbcType="VARCHAR" property="county"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="town" jdbcType="VARCHAR" property="town"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="img_id" jdbcType="BIGINT" property="imgId"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+        <result column="type" jdbcType="BIGINT" property="type"/>
+    </resultMap>
+    <sql id="queryColumns">
+        r.id relation_id,r.user_id,r.material_id,r.type,j.business_name,j.title,j.content,
+        j.price,j.description,j.img_id,j.city,j.district,j.phone,
+        j.county,j.town,j.address,r.created_by,r.created_time,j.contact,r.type
+    </sql>
+
+    <select id="queryPage" parameterType="jccMaterialPageQuery" resultType="jccMaterialInfoVo">
+        select
+        <include refid="queryColumns"/>
+        FROM jcc_material_info j,jcc_material_relation r WHERE r.material_id=j.id
+        <if test="jccMaterialPageQuery.priceStart != null and jccMaterialPageQuery.priceEnd != null">
+            and j.price between #{jccMaterialPageQuery.priceStart} and #{jccMaterialPageQuery.priceEnd}
+        </if>
+        <if test="jccMaterialPageQuery.town!=null">
+            and j.town = #{jccMaterialPageQuery.town}
+        </if>
+        and r.type= #{jccMaterialPageQuery.type}
+        ORDER BY r.created_time DESC
+        limit #{jccMaterialPageQuery.page},#{jccMaterialPageQuery.limit}
+    </select>
+
+    <select id="queryPageTotal" resultType="java.lang.Long" parameterType="java.lang.String">
+		select count(1) from jcc_material_relation r where r.type = #{type}
+	</select>
+
+    <select id="queryListByTypeList" resultType="jccMaterialInfoVo">
+        select
+        <include refid="queryColumns"/>
+        from jcc_material_info j,jcc_material_relation r where j.id= r.material_id
+        and r.type &lt; 15 order by r.updated_time desc limit 0,5
+    </select>
+
+    <select id="queryListByUserId"  parameterType="java.lang.Long" resultType="jccMaterialInfoVo">
+        select
+        <include refid="queryColumns"/>
+        FROM jcc_material_info j,jcc_material_relation r WHERE r.material_id=j.id
+        and r.user_id= #{userId}
+        ORDER BY r.created_time DESC
+    </select>
+
+    <select id="queryInfoById" parameterType="java.lang.Long" resultType="jccMaterialInfoVo">
+        select
+        <include refid="queryColumns"/>
+        FROM jcc_material_info j,jcc_material_relation r WHERE r.material_id=j.id
+        and j.id= #{id}
+        ORDER BY r.created_time DESC
+    </select>
+
+</mapper>

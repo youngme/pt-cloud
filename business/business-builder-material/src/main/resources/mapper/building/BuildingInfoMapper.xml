@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bin.cloud.business.material.base.dao.BuildingInfoMapper">
+    <resultMap id="BaseResultMap" type="com.bin.cloud.business.material.base.entity.po.BuildingInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="BUILDING_NAME" jdbcType="VARCHAR" property="buildingName"/>
+        <result column="BUILDING_ADDRESS" jdbcType="VARCHAR" property="buildingAddress"/>
+        <result column="LOWEST_TOTAL_PRICE" jdbcType="VARCHAR" property="lowestTotalPrice"/>
+        <result column="LOWEST_PRICE" jdbcType="VARCHAR" property="lowestPrice"/>
+        <result column="OPEN_QUOTATION_TIME" jdbcType="TIMESTAMP" property="openQuotationTime"/>
+        <result column="HAND_OVER_TIME" jdbcType="TIMESTAMP" property="handOverTime"/>
+        <result column="VOLUME_RATE" jdbcType="VARCHAR" property="volumeRate"/>
+        <result column="GREENING_RATE" jdbcType="VARCHAR" property="greeningRate"/>
+        <result column="TOTAL_CONSTRUCTION_AREA" jdbcType="VARCHAR" property="totalConstructionArea"/>
+        <result column="BUILDING_IMGS" jdbcType="VARCHAR" property="buildingImgs"/>
+        <result column="BUILDING_TYPE" jdbcType="VARCHAR" property="buildingType"/>
+        <result column="PAY_STATUS" jdbcType="VARCHAR" property="payStatus"/>
+        <result column="DECORATE" jdbcType="VARCHAR" property="decorate"/>
+        <result column="FEATURE" jdbcType="VARCHAR" property="feature"/>
+        <result column="PERIPHERY" jdbcType="VARCHAR" property="periphery"/>
+        <result column="HOUSE_TYPE" jdbcType="VARCHAR" property="houseType"/>
+        <result column="AREA" jdbcType="VARCHAR" property="area"/>
+        <result column="ST_IMG_IDS" jdbcType="VARCHAR" property="stImgIds"/>
+        <result column="PHONE" jdbcType="VARCHAR" property="phone"/>
+    </resultMap>
+    <sql id="pageColumn">
+        i.id,BUILDING_NAME,BUILDING_ADDRESS,LOWEST_TOTAL_PRICE,LOWEST_PRICE,OPEN_QUOTATION_TIME,BUILDING_IMGS
+        ,BUILDING_TYPE,PAY_STATUS,DECORATE,FEATURE,PERIPHERY,HOUSE_TYPE,PHONE,AREA
+    </sql>
+
+    <select id="queryPage" parameterType="buildingPageQuery" resultMap="BaseResultMap">
+        select <include refid="pageColumn"></include> from building_info i,building_relation t
+        where i.id = t.id
+        ORDER BY t.created_time DESC
+        limit #{buildingPageQuery.page},#{buildingPageQuery.limit}
+    </select>
+    <select id="queryPageTotal" resultType="java.lang.Long">
+        select count(1) from building_relation
+    </select>
+</mapper>

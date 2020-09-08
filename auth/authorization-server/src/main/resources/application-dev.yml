@@ -1,0 +1,79 @@
+server:
+  port: 8000
+#
+#eureka:
+#  instance:
+#    hostname: 127.0.0.1
+#  client:
+#    service-url:
+#      default-zone: http://${eureka.instance.hostname}:8761/eureka/
+spring:
+  application:
+    name: oauth-server
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${mysql.service.host:127.0.0.1}:${mysql.service.port:3306}/jcc_auth?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    username: ${mysql.service.username:jtao}
+    password: ${musql.service.password:jtao.123}
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6301}
+  #jwt的密钥
+  security:
+    oauth2:
+      jwt:
+        signingKey: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  autoconfigure:
+    exclude: org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration
+weChat:
+  appid: '**'
+  appsecret: '**'
+  getTokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=${wechat.appid}&secret=${wechat.appsecret}&code=CODE&grant_type=authorization_code
+  refreshTokenUrl: https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=${wechat.appid}&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+  getUserInfoUrl: https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+  checkTokenUrl: https://api.weixin.qq.com/sns/oauth?access_token=ACCESS_TOKEN&openid=OPENID
+  key:
+    request:
+      api: '/oauth/token'
+      type: 'POST'
+      isPostOnly: true
+    weChatKey: 'code'
+    openidKey: 'openid'
+    grantType: 'weChat'
+sms:
+  mobile:
+    request:
+      api: '/oauth/token'
+      type: 'POST'
+      isPostOnly: true
+    key: 'mobile'
+  send:
+    region-id: 'cn-hangzhou'
+    access-key-id: '**'
+    access-secret: '**'
+    do-main: 'dysmsapi.aliyuncs.com'
+    sign-name: '**'
+    template-code: '**'
+    version: '2017-05-25'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+logging:
+  level:
+    org.springframework.web: debug
+    org.springframework.security: DEBUG
+    com.springboot.auth: DEBUG
+    org.apache.ibatis: debug
+    java.sql.PreparedStatement: debug
+  path: logs/
+  file:
+    max-size: 1GB

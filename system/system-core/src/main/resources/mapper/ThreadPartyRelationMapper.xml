@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bin.cloud.system.core.base.dao.ThreadPartyRelationMapper">
+    <resultMap id="BaseResultMap" type="threadPartyRelation">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+
+    <select id="queryInfoByOpenid" resultType="threadPartyRelation">
+        SELECT t.*
+        FROM thread_party_relation t
+        WHERE t.openid = #{openid}
+    </select>
+
+
+</mapper>

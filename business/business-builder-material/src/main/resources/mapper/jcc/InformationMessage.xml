@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bin.cloud.business.material.base.dao.InformationMessageMapper">
+    <resultMap id="BaseResultMap" type="com.bin.cloud.business.material.base.entity.po.InformationMessage">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="read_count" jdbcType="BIGINT" property="readCount"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <select id="queryPage" parameterType="pageParams" resultMap="BaseResultMap">
+        select *
+        from information_message  where 1=1
+        <if test="pageParams.type!=null">
+            and type = #{pageParams.type}
+        </if>
+        order by created_time desc
+        limit #{pageParams.page},#{pageParams.limit}
+    </select>
+
+    <select id="queryPageTotal" resultType="java.lang.Long" parameterType="java.lang.String">
+		select count(1) from information_message
+		where 1=1
+        <if test="type!=null">
+            and type = #{type}
+        </if>
+	</select>
+</mapper>

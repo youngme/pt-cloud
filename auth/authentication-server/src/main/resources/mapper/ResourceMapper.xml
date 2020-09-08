@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bin.cloud.auth.authentication.dao.ResourceMapper">
+    <resultMap id="BaseResult" type="com.bin.cloud.auth.authentication.entity.po.Resources">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="method" jdbcType="VARCHAR" property="method"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,code,type,name,url,method,description,created_time,updated_time,created_by,updated_by
+    </sql>
+
+
+    <select id="findAll" resultMap="BaseResult">
+        SELECT DISTINCT
+        <include refid="Base_Column_List"/>
+        FROM resources
+    </select>
+
+    <select id="queryByRoleCodes" resultMap="BaseResult">
+        SELECT DISTINCT rs.code,rs.url,rs.name,rs.type,rs.method,rs.description
+        FROM roles r
+        INNER JOIN roles_resources_relation rrr ON r.id = rrr.role_id
+        INNER JOIN resources rs ON rs.id = rrr.resource_id
+        WHERE r.code IN
+        <foreach collection="roleCodes" item="roleCode" index="index" open="(" separator="," close=")">
+            #{roleCode}
+        </foreach>
+    </select>
+
+    <select id="queryResourcePage" parameterType="com.bin.cloud.common.core.entity.dto.PageParam"
+            resultMap="BaseResult">
+        select
+        <include refid="Base_Column_List"/>
+        FROM resources ORDER BY created_time DESC LIMIT #{page},#{limit}
+    </select>
+
+    <select id="queryPageTotal" resultType="java.lang.Long">
+		select count(1) from resources
+	</select>
+
+    <select id="queryByUsername" parameterType="java.lang.String" resultMap="BaseResult">
+       SELECT
+        r.*
+        FROM
+            users u,
+            users_roles_relation ut,
+            roles_resources_relation rt,
+            resources r
+        WHERE
+            u.id = ut.user_id
+        AND ut.role_id = rt.role_id
+        AND r.id = rt.resource_id
+        AND u.username = #{username}
+    </select>
+</mapper>

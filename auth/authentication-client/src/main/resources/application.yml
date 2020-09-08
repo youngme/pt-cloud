@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      jwt:
+        signingKey: 123456
+oauth:
+  token:
+    oauthorizationKey: 'Basic YWRtaW5fY2xpZW50OmFkbWluX3NlY3JldA=='
+gate:
+  ignore:
+    authentication:
+      startWith:  /oauth,/open,/registry,/sms,/actuator,/server/img,/jcc/building/free,/jcc/material/free,/jcc/reading,/jcc/information
