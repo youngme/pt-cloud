@@ -1,10 +1,11 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/**
 !**/src/main/**
 test/
 mvnw
 mvnw.cmd
+application-pro.yml
 
 
 ### STS ###
