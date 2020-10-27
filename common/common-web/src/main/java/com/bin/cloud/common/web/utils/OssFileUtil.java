@@ -28,13 +28,13 @@ public class OssFileUtil {
 
     private static final String ENDPOINT = "oss-cn-shenzhen.aliyuncs.com";
 
-//    private static final String ACCESS_KEY_ID = "LTAI4FfuSVrAQPUbemvjBCiH";
+//    private static final String ACCESS_KEY_ID = "";
 
-    private static final String ACCESS_KEY_ID = "LTAIdA9uNPmUr5qp";
+    private static final String ACCESS_KEY_ID = "";
 
-//    private static final String ACCESS_KEY_SECRET = "NJW3eq93bP077SbrKpSo13HszsYfKU";
+//    private static final String ACCESS_KEY_SECRET = "";
 
-    private static final String ACCESS_KEY_SECRET = "IkbsuenbaQlRycqlJuX4qN8NOsh76X";
+    private static final String ACCESS_KEY_SECRET = "";
 
     // bucket 名称
     private static final String BUCKET_NAME = "img-services";
